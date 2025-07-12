@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApnaThikana: Property</title>
+</head>
+<body>
+    <h2>Listing Details: </h2>
+
+    <ul>
+        <img src="<%= listing.image.url%>" alt= "<%=listing.title%>" style="width: 500px;">
+        <li> <b>Title: </b><%= listing.title %> </li>
+        <li> <b>Description:</b> <%= listing.description%> </li>
+        <li> <b>Price:</b> &#8377;<%= listing.price.toLocaleString("en-IN") %> </li>
+        <li> <b>Location:</b> <%= listing.location%> </li>
+        <li> <b>Country:</b> <%= listing.country%> </li>
+    </ul>
+</body>
+</html>

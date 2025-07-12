@@ -1,12 +1,20 @@
 const express = require("express");
 const app = express();
-const mongoose = require("mongoose");
-const ejs = require("ejs");
-const path = require("path");
-//Connect DB in Models
-const Listing = require('./models/listing.js');
+const mongoose = require("mongoose");  //DB REQUIRE
+const ejs = require("ejs");  //EJS 
+const path = require("path"); //EJS PATH
+const Listing = require('./models/listing.js');  //Connect DB in Models
+const methodOverride = require("method-override");  //post method override    
+
+
 
 // const methodOverride = require("method-override");
+app.set("views", path.join(__dirname,"views"));
+app.set("view engine","ejs");
+app.use(express.static(path.join(__dirname,"public")));
+app.use(express.urlencoded({extended:true}));   //FOR PARSING DATA
+app.use(methodOverride("_method"));  
+
 
 //Database Testing
 main()
@@ -20,6 +28,7 @@ async function main() {
 }
 
 //Testing Page
+/*
 app.get("/testListing", async (req, res)=>{
     let sampleListing = new Listing({
         title: "My New Villa",
@@ -40,8 +49,40 @@ app.get("/testListing", async (req, res)=>{
     console.log("sample was saved");
     res.send("Succesfull testing");
 })
+*/
+
+//Index route
+app.get("/listings", async(req, res) => {
+    const allListings = await Listing.find({});
+    res.render("./listings/index.ejs", {allListings});
+});
 
 
+//Create Route: New and Create and read route 
+app.get("/listings/new", async(req,res)=>{
+    res.render("./listings/new.ejs")
+});
+
+app.post("/listings", async(req,res)=>{
+    const newListing = new Listing(req.body.listing);
+    await newListing.save()
+    .then((res)=>{
+        console.log(res);
+    })
+    .catch((err)=>{
+        console.log(err);
+    })
+
+    res.redirect("/listings");
+})
+
+
+//Show Route
+app.get("/listings/:id", async(req,res)=>{
+    let {id} = req.params;
+    const listing = await Listing.findById(id);
+    res.render("./listings/show.ejs", {listing})
+})
 
 
 //Basic Api
