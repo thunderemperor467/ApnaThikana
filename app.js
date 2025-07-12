@@ -4,7 +4,7 @@ const mongoose = require("mongoose");  //DB REQUIRE
 const ejs = require("ejs");  //EJS 
 const path = require("path"); //EJS PATH
 const Listing = require('./models/listing.js');  //Connect DB in Models
-const methodOverride = require("method-override");  //post method override    
+const methodOverride = require("method-override");  //PUT method override    
 
 
 
@@ -77,12 +77,36 @@ app.post("/listings", async(req,res)=>{
 })
 
 
+//UPDATE: EDIT AND UPDATE ROUTE
+app.get("/listings/:id/edit", async(req, res)=>{
+    let {id} = req.params;
+    const listing = await Listing.findById(id);
+    res.render("listings/edit.ejs",{listing});
+});
+
+app.put("/listings/:id", async(req,res)=>{
+    let {id} = req.params;
+    await Listing.findByIdAndUpdate(id, {...req.body.listing});
+    res.redirect(`/listings/${id}`);
+})
+
+
 //Show Route
 app.get("/listings/:id", async(req,res)=>{
     let {id} = req.params;
     const listing = await Listing.findById(id);
     res.render("./listings/show.ejs", {listing})
 })
+
+//DELETE ROUTE
+app.delete("/listings/:id", async(req,res)=>{
+    let {id} = req.params;
+    let deletedListing = await Listing.findByIdAndDelete(id);
+    console.log(deletedListing);
+    res.redirect("/listings");
+})
+
+
 
 
 //Basic Api
