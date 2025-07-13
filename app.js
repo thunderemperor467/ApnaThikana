@@ -5,7 +5,7 @@ const ejs = require("ejs");  //EJS
 const path = require("path"); //EJS PATH
 const Listing = require('./models/listing.js');  //Connect DB in Models
 const methodOverride = require("method-override");  //PUT method override    
-
+const ejsMate = require("ejs-mate");
 
 
 // const methodOverride = require("method-override");
@@ -14,7 +14,7 @@ app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,"public")));
 app.use(express.urlencoded({extended:true}));   //FOR PARSING DATA
 app.use(methodOverride("_method"));  
-
+app.engine("ejs", ejsMate);
 
 //Database Testing
 main()
@@ -77,6 +77,7 @@ app.post("/listings", async(req,res)=>{
 })
 
 
+
 //UPDATE: EDIT AND UPDATE ROUTE
 app.get("/listings/:id/edit", async(req, res)=>{
     let {id} = req.params;
@@ -91,12 +92,14 @@ app.put("/listings/:id", async(req,res)=>{
 })
 
 
+
 //Show Route
 app.get("/listings/:id", async(req,res)=>{
     let {id} = req.params;
     const listing = await Listing.findById(id);
     res.render("./listings/show.ejs", {listing})
 })
+
 
 //DELETE ROUTE
 app.delete("/listings/:id", async(req,res)=>{
@@ -105,8 +108,6 @@ app.delete("/listings/:id", async(req,res)=>{
     console.log(deletedListing);
     res.redirect("/listings");
 })
-
-
 
 
 //Basic Api
