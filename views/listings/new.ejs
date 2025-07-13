@@ -1,24 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publish your Property</title>
-</head>
-<body>
-    <h2>Publish your Property</h2>
-    <form method="POST" action="/listings?_method=POST">
-        <div>
-            <label name="title" class="form-label">Title</label>
-            <input name="listing[title]" Placeholder="Enter Title" type="text" class="form-control"> <br><br>
-        </div>
-        <textarea name="listing[description]" rows="10" cols="50">Write Description</textarea> <br><br>
-        <input name= "listing[image.url]" placeholder="Enter image URL/Link " type="text"> <br><br>
-        <input name= "listing[price]" placeholder="Enter Pricing" type="number"> <br><br>
-        <input name="listing[location]" placeholder="Enter Location" type="text"> <br><br>
-        <input name="listing[country]" placeholder="Enter Country" type="text"> <br><br>
+<% layout("/layouts/boilerplate") %>
+<body class="bg-image">
+    <div class="row">
+        <div class="col-8 offset-2">    <!--offset means space from left nad offset 2 m center pr ajata h and col-8 means it contain only 8 spaces.. there are 12 spaces in whole screen-->
+            <br><br>
+            <!-- <p style="background-image: url(/Major_Projects/ApnaThikana/assets/newList.png);"></p> -->
+            <h2>Publish your Property</h2>
+            <form method="POST" action="/listings?_method=POST">
 
-        <button>Add</button>
-    </form>
+                <div class="mb-3">  <!--class=mb3 means margin body 3... margin between bodies-->
+                    <label name="title" class="form-label">Title</label> <br>
+                    <input name="listing[title]" Placeholder="Enter Title" type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label name="description" class="form-label">Description</label> <br>
+                    <textarea name="listing[description]" placeholder="Enter Description" class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label name="image" class="form-label">Image URL</label> <br>
+                    <input name= "listing[image.url]" placeholder="Enter image URL/Link " type="text" class="form-control">
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-md-4">
+                        <label name="price" class="form-label">Pricing</label><br>
+                        <input name= "listing[price]" placeholder="Enter Pricing" type="number" class="form-control"> 
+                    </div>
+                    <div class="mb-3 col-md-8">
+                        <label name="country" class="form-label">Country</label><br>
+                        <input name="listing[country]" placeholder="Enter Country" type="text" class="form-control">
+                    </div>
+                </div> 
+
+                <div class="mb-3">
+                    <label name="location" class="form-label">Location</label> <br>
+                    <input name="listing[location]" placeholder="Enter Location" type="text" class="form-control">
+                </div>     
+                <button class="btn btn-dark add-btn">Add</button>
+                <br><br><br><br>
+            </form>
+        </div>
+    </div>
 </body>
-</html>
