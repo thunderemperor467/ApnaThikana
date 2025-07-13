@@ -10,7 +10,7 @@
 }
                              /* NAVBAR */
 .navbar{
-    height: 5rem;
+    height: 4rem;
     background-color: white;
 }
 
@@ -32,7 +32,9 @@
 .f-info-links a:hover{
     text-decoration: underline;
 }
-
+.f-info-links{
+    margin-bottom: 0.5rem;
+}
 .f-info-links, .f-info-socials, .f-info-brand{
     width: 100%;
     display: flex;
@@ -48,7 +50,7 @@
 .f-info{
     text-align: center;
     display: flex;
-    height: 7rem;
+    height: 6rem;
     background-color: #ebebeb;
     flex-wrap: wrap;
     justify-content: center;
@@ -71,7 +73,7 @@
 }
 
 
-
+/* ADD PAGE */
 .card-img-top{
     border-radius: 1rem !important;
     width: 100% !important;
@@ -80,12 +82,22 @@
 
 .add-btn{
     background-color: #fe424d !important; 
-    
+    border: none !important;
 }
 
-.bg-image{
-    background-image: url('./assets/newList.png') !important;
-    background-size: cover !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
+/* SHOW PAGE */
+.btns{
+    display: flex;
+    padding-bottom: 5rem;
 }
+.show-card{
+    padding-left:0 ;
+    padding-right: 0;
+}
+/* FOR SHOW PAGE BACKGROUND*/
+.bg-image{
+    background-image: url(/assets/newList.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
