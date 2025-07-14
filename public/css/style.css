@@ -14,6 +14,11 @@
     background-color: white;
 }
 
+.navbar-brand{
+    display: flex;
+    height: 9vh;
+    width: 8vh;
+}
 .fa-compass{
     color: #fe424d;
     font-size: 2rem;
@@ -83,6 +88,12 @@
 .add-btn{
     background-color: #fe424d !important; 
     border: none !important;
+}
+
+.back_img{
+    background-image: url(/assets/publish.png);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 /* SHOW PAGE */

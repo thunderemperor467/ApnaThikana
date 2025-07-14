@@ -6,6 +6,8 @@ const path = require("path"); //EJS PATH
 const Listing = require('./models/listing.js');  //Connect DB in Models
 const methodOverride = require("method-override");  //PUT method override    
 const ejsMate = require("ejs-mate");
+const wrapAsync = require("./utils/wrapAsync.js")
+const ExpressError = require("./utils/ExpressError.js")
 
 
 // const methodOverride = require("method-override");
@@ -15,6 +17,7 @@ app.use(express.static(path.join(__dirname,"public")));
 app.use(express.urlencoded({extended:true}));   //FOR PARSING DATA
 app.use(methodOverride("_method"));  
 app.engine("ejs", ejsMate);
+
 
 //Database Testing
 main()
@@ -58,27 +61,22 @@ app.get("/listings", async(req, res) => {
 });
 
 
-//Create Route: New and Create and read route 
+//Create Route: 
+//New and Create and read route 
 app.get("/listings/new", async(req,res)=>{
     res.render("./listings/new.ejs")
 });
 
-app.post("/listings", async(req,res)=>{
+app.post("/listings", wrapAsync(async(req, res, next)=>{
     const newListing = new Listing(req.body.listing);
-    await newListing.save()
-    .then((res)=>{
-        console.log(res);
-    })
-    .catch((err)=>{
-        console.log(err);
-    })
-
+    await newListing.save();
     res.redirect("/listings");
-})
+    })
+);
 
 
-
-//UPDATE: EDIT AND UPDATE ROUTE
+//UPDATE:
+//EDIT AND UPDATE ROUTE
 app.get("/listings/:id/edit", async(req, res)=>{
     let {id} = req.params;
     const listing = await Listing.findById(id);
@@ -107,6 +105,19 @@ app.delete("/listings/:id", async(req,res)=>{
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
     res.redirect("/listings");
+})
+
+
+
+
+app.all("*",(req, res, next)=>{
+    next(new ExpressError(404, "Page not Found"));
+})
+
+// BASIC END POINT OF ALL ERRORS
+app.use((err, req, res, next)=>{
+    let {statusCode, message} = err;
+    res.status(statusCode).send(message);
 })
 
 
