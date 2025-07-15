@@ -2,24 +2,44 @@
 <div class="row">
 
     <div class="col-8 offset-3">
-    <h2>Listing Details: </h2>
+    <h2><%= listing.title %></h2>
     </div>
         <div class="card col-6 offset-3 show-card">
             <img src="<%= listing.image.url%>" class="card-img-top" alt= "<%=listing.title%> >
             <div class="card-body">
-                <p class="card-text"><b>Title: </b><%= listing.title %></p>
                 <p class="card-text"><b>Description:</b> <%= listing.description%></p>
                 <p class="card-text"><b>Price:</b> &#8377;<%= listing.price.toLocaleString("en-IN") %></p>
                 <p class="card-text"><b>Location:</b> <%= listing.location%></p>
                 <p class="card-text"><b>Country:</b> <%= listing.country%></p>
             
         </div>
-
-    <div class="btns">
+    <div class="btns">  <!--EDIT AND DELETE BUTTON-->
         <a href="/listings/<%= listing._id%>/edit" class="btn btn-dark col-1 offset-3 add-btn">Edit</a>
         <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
         <button class="btn btn-dark offset-5 ">Delete</button>
         </form>
     </div>
+
+    <hr>
+
+    <!-- Making form for Reviews -->
+     <div class="col-8 offset-3">
+        <h4>Leave a Review</h4>
+        <form method="POST" action="/listings/<%= listing.id%>/reviews?_method=POST" novalidate class="needs-validation">
+            <!-- 1st Div for Rating Section -->
+            <div class="mb-3 mt-3">    
+                <label for="rating" class="form-label">Rating</label>
+                <input type="range" min="0" max="5" id="rating" name="review[rating]" class="form-range">
+            </div>
+            <!-- 2nd Div for Feedback Section -->
+            <div class="mb-3 mt-3">
+                <label for="comment" class="form-label">Comments</label><br>
+                <textarea name="review[comment]" id="comment" cols="50" rows="5" class="form-control" required></textarea>
+                <div class="invalid-feedback">Please submit some comments for review.</div>
+            </div>
+            <!-- SUBMIT BUTTON --><br>
+            <button class="btn btn-outline-dark">Submit Review</button>
+        </form><br><br><br>
+     </div>
 </div>
 
