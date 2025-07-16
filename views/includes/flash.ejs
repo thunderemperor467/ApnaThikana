@@ -1,0 +1,20 @@
+<% if(success && success.length>0){ %>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <%= success %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" cols-6 offset-3></button>
+</div>
+<% } %>
+<!-- 
+success show the message..
+if lgaege and only success likha toh green bar show hoga kyuki ek array formed h usme empty array,
+so success.length krna pdta jisse ki agr length = 0 h toh show ni hoga 
+-->
+
+
+<!-- for ERROR -->
+<% if(error && error.length>0){ %>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <%= error %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" cols-6 offset-3></button>
+</div>
+<% } %>
