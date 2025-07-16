@@ -65,11 +65,11 @@
 .row a{
     text-decoration: none;
 }
-.card{
+.listing-card{
     margin-bottom: 2rem;
     border: none !important;
 }
-.card:hover{
+.listing-card:hover{
     font-size:103%;
     opacity: 0.95;
 }

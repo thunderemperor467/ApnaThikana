@@ -8,9 +8,10 @@ const methodOverride = require("method-override");  //PUT method override
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js")   // for Error handling
 const ExpressError = require("./utils/ExpressError.js")   //Error handling file
-const {listingSchema} = require("./schema.js");   //for lisitng validations
+const {listingSchema, reviewSchema} = require("./schema.js");   //for lisitng validations
 const Review = require("./models/review.js");    //Review schema/DB
-const {reviewSchema} = require("./schema.js");   //for review Validation
+
+
 
 
 // const methodOverride = require("method-override");
@@ -70,7 +71,7 @@ const validateListing = (req, res, next)=>{
 
 
 // Validate Review
-const validatereview = (req, res, next)=>{
+const validateReview = (req, res, next)=>{
     let {error} = reviewSchema.validate(req.body);
     if(error){
         let errMsg = error.details.map((el)=> el.message).join(".");
@@ -97,7 +98,7 @@ app.get("/listings/new", wrapAsync(async(req,res)=>{
 })
 );
 
-app.post("/listings",validateListing, wrapAsync(async(req, res, next)=>{
+app.post("/listings", wrapAsync(async(req, res, next)=>{
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
@@ -127,7 +128,7 @@ app.put("/listings/:id",validateListing, wrapAsync(async(req,res)=>{  //use vala
 //Show Route
 app.get("/listings/:id", wrapAsync(async(req,res)=>{
     let {id} = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");    //we do populate to show all data in form of id's etc
     res.render("./listings/show.ejs", {listing})
 })
 );
@@ -156,6 +157,15 @@ app.post("/listings/:id/reviews", validateReview, wrapAsync(async(req,res)=>{
 }));
 
 
+// Review delete route
+app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
+    let { id, reviewId } = req.params;
+
+    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    
+    res.redirect(`/listings/${id}`);
+}));
 
 
 // BASIC END POINT OF ALL ERRORS
