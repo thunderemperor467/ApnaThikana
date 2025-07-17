@@ -15,18 +15,19 @@
             
         </div>
 <!--EDIT AND DELETE BUTTON-->
-    <!-- < if(currUser && currUser._id.equals(listing.owner._id)){ %>         Use this condition: authentiate the owner of prop and allowd that user to delete and edit only -->
+    <% if(currUser && currUser._id.equals(listing.owner._id)){ %>        <!-- Use this condition: authentiate the owner of prop and allowd that user to delete and edit only-->
     <div class="btns">
         <a href="/listings/<%= listing._id%>/edit" class="btn btn-dark col-1 offset-3 add-btn">Edit</a>
         <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
             <button class="btn btn-dark offset-5 ">Delete</button>
         </form>
     </div>
-    <!-- < } %> -->
-    <hr>
-
+    <% } %>
+    
+    
     <!-- Making form for Reviews -->
      <div class="col-8 offset-3">
+        <% if(currUser) {%>
         <h4>Leave a Review</h4>
         <form method="POST" action="/listings/<%= listing.id%>/reviews" novalidate class="needs-validation">
             <!-- 1st Div for Rating Section -->
@@ -42,7 +43,12 @@
             </div>
             <!-- SUBMIT BUTTON --><br>
             <button class="btn btn-outline-dark">Submit Review</button>
+        <% } %>
         </form>
+        
+
+
+
          <hr><br>
         <!-- ALL REVIEWS -->
         <p><b>All Reviews</b></p>
@@ -56,7 +62,7 @@
             <div class="card col-5 ms-2 mb-3">
                 <div class="card-body outline">
 
-                    <h5 class="card-title">jane do</h5>
+                    <h5 class="card-title">@<%= review.author.username%></h5>
                     <p class="card-text"><%= review.comment %></p>
                     <p class="card-text">Rating: <%= review.rating%>&starf;</p>
                 </div>

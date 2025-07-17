@@ -37,7 +37,14 @@ router.post("/", wrapAsync(async(req, res, next)=>{
 //Show Route
 router.get("/:id", wrapAsync(async(req,res)=>{
     let {id} = req.params;
-    const listing = await Listing.findById(id).populate("reviews").populate("owner");    //we do populate to show all data in form of id's etc
+    const listing = await Listing.findById(id)
+    .populate({
+        path: "reviews",
+        populate: {
+            path: "author",
+        },
+    })
+    .populate("owner");    //we do populate to show all data in form of id's etc
     if(!listing){
         req.flash("error", "Invalid Request")
         return res.redirect("/listings")

@@ -1,6 +1,6 @@
 const Listing = require("./models/listing")
 const {reviewSchema} = require("./schema");  
-
+const Review = require("./models/review"); 
 //Authentication of the user: login 
 module.exports.isLoggedIn = (req,res,next)=>{
     // console.log(req.path, "..", req.orginalUrl);
@@ -60,4 +60,15 @@ module.exports.validateReview = (req, res, next) =>{
             next();
         }
     
+};
+
+
+module.exports.isReviewAuthor = async(req, res, next)=>{
+    let { id, reviewId } = req.params;
+    let review = await Review.findById(reviewId);
+    if(!review.author._id.equals(res.locals.currUser._id)){
+        req.flash("error", "You didn't created this review!");
+        return res.redirect(`/listings/${id}`);
+    }
+    next();
 };
