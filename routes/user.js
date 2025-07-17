@@ -3,6 +3,8 @@ const router = express.Router({ mergeParams: true});
 const wrapAsync = require("../utils/wrapAsync.js");
 const {userSchema} = require("../schema.js"); 
 const User = require("../models/user.js") 
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
 
 router.get("/signup",(Req,res)=>{
     res.render("./users/signup.ejs");
@@ -23,6 +25,21 @@ router.post("/signup", async(req, res)=>{
         res.redirect("/signup");
     };
     
+})
+
+
+router.get("/login",(req, res)=>{
+    res.render("./users/login.ejs");
+});
+
+router.post("/login", passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true,
+    }), 
+    async(req, res) => {
+        req.flash("Welcome to ApnaThikana! You are logged in!")
+        res.redirect("/listings");
+        
 })
 
 
