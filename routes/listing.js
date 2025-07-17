@@ -5,6 +5,7 @@ const wrapAsync = require("../utils/wrapAsync.js")   // for Error handling
 const ExpressError = require("../utils/ExpressError.js")   //Error handling file
 const {listingSchema} = require("../schema.js");   //for lisitng validations
 const {isLoggedIn} = require("../middleware.js");
+const user = require("../routes/user.js");
 
 // Validate listing middleware
 const validateListing = (req, res, next)=>{
@@ -35,6 +36,7 @@ router.get("/new", isLoggedIn, wrapAsync(async(req,res)=>{
 
 router.post("/", wrapAsync(async(req, res, next)=>{
     const newListing = new Listing(req.body.listing);
+    newListing.owner = req.user._id;
     await newListing.save();
     req.flash("success", "New Listing Created!")
     res.redirect("/listings");
@@ -46,11 +48,12 @@ router.post("/", wrapAsync(async(req, res, next)=>{
 //Show Route
 router.get("/:id", wrapAsync(async(req,res)=>{
     let {id} = req.params;
-    const listing = await Listing.findById(id).populate("reviews");    //we do populate to show all data in form of id's etc
+    const listing = await Listing.findById(id).populate("reviews").populate("owner");    //we do populate to show all data in form of id's etc
     if(!listing){
         req.flash("error", "Invalid Request")
         return res.redirect("/listings")
     }
+    // console.log(listing);
     res.render("./listings/show.ejs", {listing})
 })
 );

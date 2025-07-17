@@ -7,6 +7,7 @@
         <div class="card col-6 offset-3 show-card listing-card">
             <img src="<%= listing.image.url%>" class="card-img-top" alt= "<%=listing.title%> >
             <div class="card-body">
+                <p class="card-text"><b>Owned by:<i></b> <%= listing.owner.username%></i></p>
                 <p class="card-text"><b>Description:</b> <%= listing.description%></p>
                 <p class="card-text"><b>Price:</b> &#8377;<%= listing.price.toLocaleString("en-IN") %></p>
                 <p class="card-text"><b>Location:</b> <%= listing.location%></p>
