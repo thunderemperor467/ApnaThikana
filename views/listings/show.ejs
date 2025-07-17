@@ -14,13 +14,15 @@
                 <p class="card-text"><b>Country:</b> <%= listing.country%></p>
             
         </div>
-    <div class="btns">  <!--EDIT AND DELETE BUTTON-->
+<!--EDIT AND DELETE BUTTON-->
+    <!-- < if(currUser && currUser._id.equals(listing.owner._id)){ %>         Use this condition: authentiate the owner of prop and allowd that user to delete and edit only -->
+    <div class="btns">
         <a href="/listings/<%= listing._id%>/edit" class="btn btn-dark col-1 offset-3 add-btn">Edit</a>
         <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
             <button class="btn btn-dark offset-5 ">Delete</button>
         </form>
     </div>
-
+    <!-- < } %> -->
     <hr>
 
     <!-- Making form for Reviews -->

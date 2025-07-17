@@ -4,20 +4,9 @@ const Listing = require('../models/listing.js');  //Connect DB in Models
 const wrapAsync = require("../utils/wrapAsync.js")   // for Error handling
 const ExpressError = require("../utils/ExpressError.js")   //Error handling file
 const {listingSchema} = require("../schema.js");   //for lisitng validations
-const {isLoggedIn} = require("../middleware.js");
+const {isLoggedIn, isOwner, validateListing} = require("../middleware.js");
 const user = require("../routes/user.js");
 
-// Validate listing middleware
-const validateListing = (req, res, next)=>{
-    let {error} = listingSchema.validate(req.body);
-    if(error){ 
-        let errMsg = error.details.map((el)=> el.message).join(".");
-        throw new ExpressError(400, errMsg);
-    }
-    else{
-        next();
-    }
-}
 
 //Index route
 router.get("/", wrapAsync(async(req, res) => {
@@ -61,14 +50,14 @@ router.get("/:id", wrapAsync(async(req,res)=>{
 
 //UPDATE:
 //EDIT AND UPDATE ROUTE
-router.get("/:id/edit",isLoggedIn, wrapAsync(async(req, res)=>{
+router.get("/:id/edit",isLoggedIn, isOwner, wrapAsync(async(req, res)=>{
     let {id} = req.params;
     const listing = await Listing.findById(id);
     res.render("listings/edit.ejs",{listing});
 })
 );
 
-router.put("/:id",isLoggedIn, validateListing,  wrapAsync(async(req,res)=>{  //use valaidateListning for the error handling on server side by Joi
+router.put("/:id",isLoggedIn, isOwner, validateListing,  wrapAsync(async(req,res)=>{  //use valaidateListning for the error handling on server side by Joi
     let {id} = req.params;
     await Listing.findByIdAndUpdate(id, {...req.body.listing});
     req.flash("success", "Listing Updated!")
@@ -77,7 +66,7 @@ router.put("/:id",isLoggedIn, validateListing,  wrapAsync(async(req,res)=>{  //u
 );
 
 //DELETE ROUTE
-router.delete("/:id", isLoggedIn, wrapAsync(async(req,res)=>{
+router.delete("/:id", isLoggedIn, isOwner, wrapAsync(async(req,res)=>{
     let {id} = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
