@@ -85,7 +85,7 @@ app.use("/", userRouter);
 
 // ✅ Root route for homepage
 app.get("/", (req, res) => {
-    res.render("home"); // Ensure 'views/home.ejs' exists
+    res.render("index.js"); 
 });
 
 // Dummy route for testing
