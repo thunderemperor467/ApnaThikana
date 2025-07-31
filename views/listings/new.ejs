@@ -6,7 +6,7 @@
 <!-- FORM -->
             <!-- <p style="background-image: url(/Major_Projects/ApnaThikana/assets/newList.png);"></p> -->
             <h2>Publish your Property</h2>
-            <form method="POST" action="/listings"  novalidate class="needs-validation">
+            <form method="POST" action="/listings"  novalidate class="needs-validation"  enctype="multipart/form-data">
 
                 <div class="mb-3">  <!--class=mb3 means margin body 3... margin between bodies-->
                     <label name="title" class="form-label">Title</label> <br>
@@ -20,9 +20,11 @@
                     <div class="invalid-feedback">Please enter a short description</div>
                     
                 </div>
+<!-- UPLOADING IMAGE -->
                 <div class="mb-3">
-                    <label name="image" class="form-label">Image URL</label> <br>
-                    <input name= "listing[image.url]" placeholder="Enter image URL/Link " type="text" class="form-control">
+                    <label name="image" class="form-label">Upload Image</label> <br>
+                    <input name= "listing[image]" type="file" class="form-control">
+                    required
                 </div>
 
                 <div class="row">

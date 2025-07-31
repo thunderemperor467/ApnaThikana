@@ -112,3 +112,9 @@
     background-size: cover;
 }
 
+
+/* MAP */
+#map {
+    height: 400px;
+    width: 80vh;
+}

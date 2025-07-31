@@ -1,3 +1,8 @@
+require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+  require('dotenv').config();
+}
+
 const express = require("express");
 const router = express.Router();
 const Listing = require('../models/listing.js');  //Connect DB in Models
@@ -7,29 +12,43 @@ const {listingSchema} = require("../schema.js");   //for lisitng validations
 const {isLoggedIn, isOwner, validateListing} = require("../middleware.js");
 const user = require("../routes/user.js");
 const listingController = require("../controllers/listings.js")
+const multer = require("multer");
+const {storage} = require("../cloudConfig.js");
+const parser = multer({ storage: storage });
+const upload = multer({storage});
 
+//Create Route: 
+//New and Create and read route 
+router.get("/new", isLoggedIn, wrapAsync(listingController.new)
+);
 
 router
     .route("/")
     //Index route
     .get(wrapAsync(listingController.index))  
     //Create new list  
-    .post(isLoggedIn, validateListing, wrapAsync(listingController.newpost));
-
+    .post(
+        isLoggedIn, 
+        validateListing,
+        upload.single('listing[image]'), 
+        wrapAsync(listingController.newpost));
+    
 router
     .route("/:id")
-    // show route
+// show route
     .get( wrapAsync(listingController.show))
-    // listing update
-    .put(isLoggedIn, isOwner, validateListing,  wrapAsync(listingController.updatePost))
-    // listing delete
+//Update
+    .put(
+      isLoggedIn,
+      isOwner, 
+      upload.single('listing[image]'), 
+      validateListing,  
+      wrapAsync(listingController.updatePost))
+// listing delete
     .delete(isLoggedIn, isOwner, wrapAsync(listingController.delete));
 
 
-//Create Route: 
-//New and Create and read route 
-router.get("/new", isLoggedIn, wrapAsync(listingController.new)
-);
+
 //UPDATE:
 //EDIT AND UPDATE ROUTE
 router.get("/:id/edit",isLoggedIn, isOwner, wrapAsync(listingController.edit)

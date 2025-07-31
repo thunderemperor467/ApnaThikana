@@ -11,19 +11,17 @@ const listingSchema = new Schema({
         type: String,
         required: true
     },
+    
     image: {
-        filename: String,
-        url: {
-            type: String,
-            required: true,
-            set: (v) => v === "" ? "https://unsplash.com/photos/a-lake-surrounded-by-mountains-under-a-blue-sky-Aln972onVgE" : v,
-        },
+        url: String,
+        filename: String
     },
 
     price:{
         type: Number,
         required: true
     },
+
     location: {
         type: String,
         required: true
@@ -42,6 +40,18 @@ const listingSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    geometry:{
+        type:{
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates:{
+            type: [Number],
+            required: true
+        },
+    }
+
 });
 
 
