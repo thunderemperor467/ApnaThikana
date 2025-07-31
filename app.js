@@ -84,8 +84,14 @@ app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 
 // ✅ Root route for homepage
-app.get("/", (req, res) => {
-    res.render("listings/index"); 
+app.get("/", async (req, res) => {
+    try {
+        const allListings = await Listing.find({});
+        res.render("listings/index", { allListings });
+    } catch (err) {
+        console.error("Error fetching listings:", err);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 // Dummy route for testing
