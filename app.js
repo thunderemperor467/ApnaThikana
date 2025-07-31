@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-// Session configuration using secure secret from .env
+// Session configuration
 const sessionOptions = {
     secret: process.env.SECRET || "devfallbacksecret",
     resave: false,
@@ -52,14 +52,14 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
-// Passport config
+// Passport configuration
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// Global flash + user middleware
+// Global middleware for flash messages and user
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
@@ -67,7 +67,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// MongoDB Atlas connection
+// MongoDB connection
 const dbURL = process.env.ATLASDB_URL;
 mongoose.connect(dbURL)
     .then(() => {
@@ -83,17 +83,22 @@ app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 
-// Dummy user route for testing
+// ✅ Root route for homepage
+app.get("/", (req, res) => {
+    res.render("home"); // Ensure 'views/home.ejs' exists
+});
+
+// Dummy route for testing
 app.get("/demouser", async (req, res) => {
-    let fakeUser = new User({
+    const fakeUser = new User({
         email: "student@gmail.com",
         username: "delta_student"
     });
-    let registeredUser = await User.register(fakeUser, "helloworld");
+    const registeredUser = await User.register(fakeUser, "helloworld");
     res.send(registeredUser);
 });
 
-// Global user loader
+// Global user injection
 app.use((req, res, next) => {
     res.locals.user = req.user;
     next();
@@ -105,7 +110,7 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render("./listings/error.ejs", { message });
 });
 
-// Server
+// Server start
 app.listen(8080, () => {
     console.log("🚀 Server is running on port 8080");
 });
